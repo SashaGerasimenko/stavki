@@ -1,14 +1,12 @@
+from logging import basicConfig, INFO
+
+from aiogram import executor
 from aiogram import types
 from aiogram.types import ReplyKeyboardMarkup
 from aiogram.types import ReplyKeyboardRemove
-from aiogram import executor
-from logging import basicConfig, INFO
 
 from data.config import ADMINS
-from loader import dp, db, bot
-
-import handlers
-
+from loader import dp, db
 
 user_message = 'Пользователь'
 admin_message = 'Админ'
@@ -30,7 +28,6 @@ async def cmd_start(message: types.Message):
     ''', reply_markup=markup)
 
 
-
 @dp.message_handler(text=admin_message)
 async def admin_mode(message: types.Message):
     cid = message.chat.id
@@ -39,6 +36,7 @@ async def admin_mode(message: types.Message):
 
     await message.answer('Включен админский режим.',
                          reply_markup=ReplyKeyboardRemove())
+
 
 @dp.message_handler(text=user_message)
 async def user_mode(message: types.Message):
@@ -50,7 +48,7 @@ async def user_mode(message: types.Message):
                          reply_markup=ReplyKeyboardRemove())
 
 
-async def on_startup(dp):
+async def on_startup():
     basicConfig(level=INFO)
     db.create_tables()
 
